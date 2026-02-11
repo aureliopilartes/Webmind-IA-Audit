@@ -1,0 +1,5 @@
+{
+  "name": "WebMind IA Audit",
+  "description": "Uma plataforma assistida por IA para análise de vulnerabilidade, qualidade de código e dívida técnica em repositórios, com integração de pagamento Multicaixa.",
+  "requestFramePermissions": []
+}
