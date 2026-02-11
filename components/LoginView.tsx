@@ -2,7 +2,7 @@ import React from 'react';
 import { Icons } from './Icons';
 
 interface LoginViewProps {
-  onLogin: (provider: 'google' | 'github') => void;
+  onLogin: (provider: 'github') => void;
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
@@ -30,13 +30,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
           >
             <Icons.Github size={20} />
             <span>Continuar com GitHub</span>
-          </button>
-          <button 
-            onClick={() => onLogin('google')}
-            className="w-full flex items-center justify-center space-x-3 bg-white border border-gray-200 text-gray-700 p-4 rounded-xl hover:bg-gray-50 transition-all transform hover:scale-[1.02] active:scale-95 font-medium shadow-sm"
-          >
-            <span className="font-bold text-blue-500 text-xl">G</span>
-            <span>Continuar com Google</span>
           </button>
         </div>
         

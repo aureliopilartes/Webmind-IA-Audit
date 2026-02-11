@@ -56,7 +56,7 @@ const App: React.FC = () => {
   };
 
   // Auth Handlers
-  const handleLogin = (provider: 'google' | 'github') => {
+  const handleLogin = (provider: 'github') => {
     // Simulate auth delay
     setTimeout(() => {
       setUser({ ...MOCK_USER, provider });
