@@ -11,6 +11,7 @@ import { LoginView } from './components/LoginView';
 import { PlanSelectionView } from './components/PlanSelectionView';
 import { LoadingOverlay } from './components/LoadingOverlay';
 import { Icons } from './components/Icons';
+import { Toast, ToastType } from './components/Toast';
 
 // --- MOCK DATA ---
 const MOCK_REPOS: Repository[] = [
@@ -39,10 +40,28 @@ const App: React.FC = () => {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Toast State
+  const [toast, setToast] = useState<{ message: string; type: ToastType; isVisible: boolean }>({
+    message: '',
+    type: 'info',
+    isVisible: false,
+  });
+
+  const showToast = (message: string, type: ToastType = 'info') => {
+    setToast({ message, type, isVisible: true });
+  };
+
+  const hideToast = () => {
+    setToast(prev => ({ ...prev, isVisible: false }));
+  };
+
   // Auth Handlers
   const handleLogin = (provider: 'google' | 'github') => {
     // Simulate auth delay
-    setTimeout(() => setUser({ ...MOCK_USER, provider }), 800);
+    setTimeout(() => {
+      setUser({ ...MOCK_USER, provider });
+      showToast(`Bem-vindo de volta, ${MOCK_USER.name}!`, 'success');
+    }, 800);
   };
 
   const handleLogout = () => {
@@ -78,8 +97,10 @@ const App: React.FC = () => {
     try {
       const data = await analyzeRepository(selectedRepo, analysisType);
       setResult(data);
+      showToast('Análise concluída com sucesso!', 'success');
     } catch (e) {
       console.error(e);
+      showToast('Erro ao realizar a análise. Tente novamente.', 'error');
       // Ensure we don't get stuck in loading state on error
       setIsAnalyzing(false); 
     } finally {
@@ -89,7 +110,17 @@ const App: React.FC = () => {
 
   // 1. Unauthenticated View
   if (!user) {
-    return <LoginView onLogin={handleLogin} />;
+    return (
+      <>
+        <LoginView onLogin={handleLogin} />
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          isVisible={toast.isVisible} 
+          onClose={hideToast} 
+        />
+      </>
+    );
   }
 
   // 2. Authenticated Layout
@@ -103,6 +134,7 @@ const App: React.FC = () => {
           setCurrentView(view);
           setSelectedRepo(null);
           setResult(null);
+          setIsMobileMenuOpen(false);
         }}
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
@@ -110,7 +142,7 @@ const App: React.FC = () => {
       
       <main className="flex-1 p-6 lg:p-10 overflow-y-auto h-screen relative">
         {/* Mobile Header (Visible only on small screens) */}
-        <div className="md:hidden flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+        <div className="md:hidden flex justify-between items-center mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-100 sticky top-0 z-40">
           <div className="flex items-center space-x-3">
              <button 
                onClick={() => setIsMobileMenuOpen(true)}
@@ -146,6 +178,7 @@ const App: React.FC = () => {
             result={result} 
             onBack={() => { setSelectedRepo(null); setResult(null); }}
             onNewAnalysis={() => { setSelectedRepo(null); setResult(null); }}
+            onDownloadPdf={() => showToast('Download do PDF iniciado...', 'info')}
           />
         )}
       </main>
@@ -158,6 +191,13 @@ const App: React.FC = () => {
       />
 
       {isAnalyzing && <LoadingOverlay />}
+      
+      <Toast 
+        message={toast.message} 
+        type={toast.type} 
+        isVisible={toast.isVisible} 
+        onClose={hideToast} 
+      />
     </div>
   );
 };

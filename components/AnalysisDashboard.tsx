@@ -9,9 +9,16 @@ interface AnalysisDashboardProps {
   result: AnalysisResult;
   onBack: () => void;
   onNewAnalysis: () => void;
+  onDownloadPdf?: () => void;
 }
 
-export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ repo, result, onBack, onNewAnalysis }) => {
+export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ 
+  repo, 
+  result, 
+  onBack, 
+  onNewAnalysis,
+  onDownloadPdf 
+}) => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20 max-w-7xl mx-auto">
       <header className="flex flex-col lg:flex-row lg:items-center justify-between mb-10 gap-6">
@@ -38,7 +45,10 @@ export const AnalysisDashboard: React.FC<AnalysisDashboardProps> = ({ repo, resu
           >
             Nova Análise
           </button>
-          <button className="w-full sm:w-auto flex justify-center items-center px-4 py-3 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-500/20">
+          <button 
+            onClick={onDownloadPdf}
+            className="w-full sm:w-auto flex justify-center items-center px-4 py-3 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors shadow-lg shadow-blue-500/20 active:scale-95 transform"
+          >
             <Icons.Download size={18} className="mr-2" />
             PDF
           </button>

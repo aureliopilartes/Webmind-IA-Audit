@@ -11,8 +11,8 @@ const MOCK_BILLING = [
 
 export const BillingView: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4">
-      <header className="mb-10">
+    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 pb-20">
+      <header className="mb-8 md:mb-10">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Pagamentos e Faturas</h1>
         <p className="text-gray-500">Gerencie seus métodos de pagamento e visualize o histórico de transações.</p>
       </header>
@@ -54,7 +54,7 @@ export const BillingView: React.FC = () => {
           </div>
 
           {/* Add New Card */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-dashed border-gray-200 flex flex-col justify-center items-center text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-all group h-full min-h-[220px]">
+          <div className="bg-white rounded-2xl p-6 border-2 border-dashed border-gray-200 flex flex-col justify-center items-center text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition-all group h-full min-h-[160px] md:min-h-[220px]">
             <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mb-4 group-hover:bg-blue-100 group-hover:scale-110 transition-all">
               <Icons.LayoutGrid size={24} className="text-blue-600"/>
             </div>
@@ -67,10 +67,11 @@ export const BillingView: React.FC = () => {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-gray-900">Histórico de Transações</h2>
-          <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">Baixar Todas</button>
+          <button className="text-sm text-blue-600 hover:text-blue-800 font-medium bg-blue-50 px-3 py-1.5 rounded-lg">Baixar Todas</button>
         </div>
         
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        {/* Desktop Table */}
+        <div className="hidden md:block bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
@@ -105,6 +106,31 @@ export const BillingView: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-4">
+          {MOCK_BILLING.map((bill) => (
+            <div key={bill.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="flex items-center space-x-3 overflow-hidden">
+                 <div className="p-2.5 bg-green-50 rounded-xl text-green-600 shrink-0">
+                    <Icons.CheckCircle2 size={18} />
+                 </div>
+                 <div className="min-w-0">
+                    <div className="font-bold text-gray-900 text-sm truncate">{bill.item}</div>
+                    <div className="text-xs text-gray-400 flex items-center mt-0.5">
+                       <span>{bill.date}</span>
+                       <span className="mx-1.5">•</span>
+                       <span className="font-mono">{bill.id}</span>
+                    </div>
+                 </div>
+              </div>
+              <div className="text-right shrink-0 ml-2">
+                 <div className="font-bold text-gray-900">{bill.amount.toLocaleString()} KZ</div>
+                 <button className="text-xs text-blue-600 font-medium mt-1">Recibo</button>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </div>
